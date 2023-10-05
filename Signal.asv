@@ -61,11 +61,10 @@ classdef Signal
                 error = "Reference point outside of the Signal's Scope";
                 disp(error)
             else
-                zero_idx = abs(sig.Start_Time)*sig.Frequency*sig.Sample_per_Cycle+1 ;
-                cycle_idx = Cycle_Amount*sig.Sample_per_Cycle;
-                index_of_interest = round(zero_idx-cycle_idx/2):round(zero_idx+cycle_idx/2);
-                interval_of_interest = sig.Time_Vector(index_of_interest);
-                sig_of_interest = sig.Data_Vector(index_of_interest);
+                zero_idx = abs(sig.Start_Time)*sig.Frequency*sig.Sample_per_Cycle+1
+                cycle_idx = Cycle_Amount*sig.Sample_per_Cycle
+                interval_of_interest = round(zero_idx-range_idx/2):round(zero_idx+range_idx/2)
+                sig_of_interest = sig.Data_Vector(interval_of_interest);
                 plot(interval_of_interest,sig_of_interest)
             end
 
