@@ -23,8 +23,9 @@ classdef Signal
         Start_Time
         Duration
         Sample_per_Cycle
-        Data_Vector
         Time_Vector
+        Data_Vector
+        
     end
 
     methods
@@ -63,10 +64,20 @@ classdef Signal
             else
                 zero_idx = abs(sig.Start_Time)*sig.Frequency*sig.Sample_per_Cycle+1 ;
                 cycle_idx = Cycle_Amount*sig.Sample_per_Cycle;
-                index_of_interest = round(zero_idx-cycle_idx/2):round(zero_idx+cycle_idx/2);
-                interval_of_interest = sig.Time_Vector(index_of_interest);
-                sig_of_interest = sig.Data_Vector(index_of_interest);
-                plot(interval_of_interest,sig_of_interest)
+                %Checking that the Cycle of interest is still in the range
+                %of the signal_time vector
+                if ((zero_idx - round(cycle_idx/2) < 0) || ((size(sig.Time_Vector,2)-zero_idx-round(cycle_idx/2))<0))
+                    error = "Cycle range is too big for the reference point";
+                    disp(error)
+                else
+                    %calculating the index vector accourding to the
+                    %reference point and the cycle amount. Selecting the
+                    %interested part from the time and data vector
+                    index_of_interest = round(zero_idx-cycle_idx/2):round(zero_idx+cycle_idx/2);
+                    interval_of_interest = sig.Time_Vector(index_of_interest);
+                    sig_of_interest = sig.Data_Vector(index_of_interest);
+                    plot(interval_of_interest,sig_of_interest)
+                end
             end
 
         end
