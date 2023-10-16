@@ -22,7 +22,7 @@ classdef Signal
     properties
         Amplitude double
         Type string
-        Frequency double 
+        Frequency double
         Phase double
         Start_Time double
         Duration double
@@ -30,8 +30,8 @@ classdef Signal
         Sample_per_Cycle double
         PhaseShiftperUnit double
         ShiftperUnit double
-        Time_Vector 
-        Data_Vector 
+        Time_Vector
+        Data_Vector
 
     end
 
@@ -39,17 +39,17 @@ classdef Signal
         function sig = Signal(Amplitude,Type,Frequency,Phase,Start_Time,Duration,Sample_per_Cycle)
             %constructor function
             if (nargin == 7)
-            sig.Amplitude = Amplitude;
-            sig.Type = Type;
-            sig.Frequency = Frequency;
-            sig.Phase = Phase;
-            sig.Start_Time = Start_Time;
-            sig.Duration = Duration;
-            sig.End_Time = sig.Start_Time + sig.Duration;
-            sig.Sample_per_Cycle = Sample_per_Cycle;
-            sig.PhaseShiftperUnit = 360/sig.Sample_per_Cycle;
-            % This calculates how many units of shift required for a Phase according to Sample_per_Cycle 
-            sig.ShiftperUnit = round(sig.Phase / sig.PhaseShiftperUnit);
+                sig.Amplitude = Amplitude;
+                sig.Type = Type;
+                sig.Frequency = Frequency;
+                sig.Phase = Phase;
+                sig.Start_Time = Start_Time;
+                sig.Duration = Duration;
+                sig.End_Time = sig.Start_Time + sig.Duration;
+                sig.Sample_per_Cycle = Sample_per_Cycle;
+                sig.PhaseShiftperUnit = 360/sig.Sample_per_Cycle;
+                % This calculates how many units of shift required for a Phase according to Sample_per_Cycle
+                sig.ShiftperUnit = round(sig.Phase / sig.PhaseShiftperUnit);
             end
 
         end
@@ -61,10 +61,13 @@ classdef Signal
 
         function Y = generate_data_vector(sig)                   %Data_Vector generator
             Phase_Rad = sig.Phase*2*pi/360;
-            if (sig.Type == "sinSignal")
+            if (sig.Type == "Signal")
                 Y = sig.Amplitude*cos(2*pi*sig.Frequency*sig.Time_Vector+Phase_Rad);
-            else
+            elseif (sig.Type == "Noise")
                 Y = sig.Amplitude*rand(size(sig.Time_Vector));
+            else
+                error = "Wrong Type";
+                disp(error)
 
             end
         end
@@ -78,7 +81,7 @@ classdef Signal
             end
 
         end
-        
+
         % signalAdd function add together two function and generate the
         % signal object for the result signal
         function sumsig = signalAdd(sumsig,sig1,sig2)
@@ -91,7 +94,7 @@ classdef Signal
             sumsig.Duration = sumsig.End_Time-sumsig.Start_Time;
             sumsig.Sample_per_Cycle = sig1.Sample_per_Cycle;
             sumsig.PhaseShiftperUnit = 360/sumsig.Sample_per_Cycle;
-            % This calculates how many units of shift required for a Phase according to Sample_per_Cycle 
+            % This calculates how many units of shift required for a Phase according to Sample_per_Cycle
             sumsig.ShiftperUnit = round(sumsig.Phase / sumsig.PhaseShiftperUnit);
             sumsig.Time_Vector = sig1.Time_Vector;
             sumsig.Data_Vector = (sig1.Data_Vector + sig2.Data_Vector);
@@ -126,7 +129,6 @@ classdef Signal
 
                 end
             end
-
         end
 
     end
